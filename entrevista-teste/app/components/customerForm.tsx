@@ -19,7 +19,7 @@ type FormData = {
   nome: string;
   email: string;
   whatsapp?: string;
-  tipo: string;
+  tipo?: string;
   cpf?: string;
   cnpj?: string;
 };
@@ -27,9 +27,6 @@ type FormData = {
 const formSchema = z.object({
   nome: z.string().min(1, "Nome inválido"),
   email: z.string().email("Email inválido"),
-  tipo: z.string(),
-  cpf: z.string().min(11, "CPF inválido").optional(),
-  cnpj: z.string().min(14, "CNPJ inválido").optional(),
 });
 
 export default function CustomerForm({
