@@ -106,7 +106,7 @@ export default function CustomerForm({
   }, [type, setValue]);
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={() => {handleSubmit(onSubmit)}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <Field>
         <Label>Nome</Label>
         <Input
