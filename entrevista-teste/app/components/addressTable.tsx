@@ -29,7 +29,7 @@ export default function AddressTable({
       </TableHeader>
       <TableBody>
         {addresses.map((address) => (
-          <Dialog>
+          <Dialog key={address.id}>
             <DialogTrigger asChild>
               <TableRow key={address.id} className="hover:cursor-pointer">
                 <TableCell>{address.cep || "-"}</TableCell>

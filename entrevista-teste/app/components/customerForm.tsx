@@ -24,25 +24,13 @@ type FormData = {
   cnpj?: string;
 };
 
-const formSchema = z
-  .object({
-    nome: z.string().min(1, "Nome inválido"),
-    email: z.string().email("Email inválido"),
-    tipo: z.string("Tipo inválido"),
-    cpf: z.string().min(11, "CPF Inválido").optional(),
-    cnpj: z.string().min(14, "CNPJ Inválido").optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.tipo === "cpf" && !data.cpf) return false;
-      if (data.tipo === "cnpj" && !data.cnpj) return false;
-      return true;
-    },
-    {
-      message: "CPF ou CNPJ obrigatório",
-      path: ["cpf"],
-    },
-  );
+const formSchema = z.object({
+  nome: z.string().min(1, "Nome inválido"),
+  email: z.string().email("Email inválido"),
+  tipo: z.string(),
+  cpf: z.string().min(11, "CPF inválido").optional(),
+  cnpj: z.string().min(14, "CNPJ inválido").optional(),
+});
 
 export default function CustomerForm({
   initialData,
@@ -95,13 +83,17 @@ export default function CustomerForm({
 
       // Reseta o formulário
       reset({
-        tipo: "cpf",
         nome: "",
         email: "",
         whatsapp: "",
+        tipo: "cpf",
         cpf: "",
         cnpj: "",
       });
+      setType("cpf");
+      setValue("tipo", "cpf");
+      setValue("cpf", "");
+      setValue("cnpj", "");
     } catch (error) {
       console.log(error);
     }
@@ -110,10 +102,16 @@ export default function CustomerForm({
   // Defini valor inicial do tipo no formulário
   useEffect(() => {
     setValue("tipo", type || "cpf");
-  }, []);
+  }, [type, setValue]);
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={(e) => {
+        console.log(errors);
+        handleSubmit(onSubmit);
+      }}
+    >
       <Field>
         <Label>Nome</Label>
         <Input
@@ -156,7 +154,7 @@ export default function CustomerForm({
         <Field className="flex-1" aria-invalid={errors.tipo !== undefined}>
           <Label>Tipo</Label>
           <Select
-            value={type}
+            value={type || "cpf"}
             onValueChange={(newValue) => {
               setType(newValue);
               setValue("tipo", newValue);

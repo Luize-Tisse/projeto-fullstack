@@ -36,6 +36,7 @@ export default function CustomerTable({
             onOpenChange={() => {
               getCustomers();
             }}
+            key={customer.id}
           >
             <DialogTrigger asChild>
               <TableRow key={customer.id} className="hover:cursor-pointer">
