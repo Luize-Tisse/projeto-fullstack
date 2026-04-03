@@ -96,6 +96,11 @@ export default function CustomerForm({
       // Reseta o formulário
       reset({
         tipo: "cpf",
+        nome: "",
+        email: "",
+        whatsapp: "",
+        cpf: "",
+        cnpj: "",
       });
     } catch (error) {
       console.log(error);
