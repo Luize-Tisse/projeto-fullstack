@@ -94,7 +94,9 @@ export default function CustomerForm({
       }
 
       // Reseta o formulário
-      reset();
+      reset({
+        tipo: "cpf",
+      });
     } catch (error) {
       console.log(error);
     }
