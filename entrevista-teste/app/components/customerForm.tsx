@@ -56,7 +56,24 @@ export default function CustomerForm({
 
   // Ao enviar form
   async function onSubmit(data: FormData) {
-    const totalData = { ...data, tipo: type || "cpf" };
+    const totalData: any = {
+      nome: data.nome,
+      email: data.email,
+      whatsapp: data.whatsapp,
+      tipo: type,
+    };
+
+    if (type === "cpf") totalData.cpf = data.cpf;
+    if (type === "cnpj") totalData.cnpj = data.cnpj;
+
+    await fetch(
+      `http://localhost:8000/clientes/${initialData ? initialData.id : ""}`,
+      {
+        method: initialData ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(totalData),
+      },
+    );
 
     try {
       // Faz o POST ou PUT para a api
