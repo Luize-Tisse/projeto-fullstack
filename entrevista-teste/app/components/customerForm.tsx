@@ -94,6 +94,7 @@ export default function CustomerForm({
       setValue("tipo", "cpf");
       setValue("cpf", "");
       setValue("cnpj", "");
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +109,7 @@ export default function CustomerForm({
     <form
       className="flex flex-col gap-4"
       onSubmit={(e) => {
+        e.preventDefault();
         console.log(errors);
         handleSubmit(onSubmit);
       }}
