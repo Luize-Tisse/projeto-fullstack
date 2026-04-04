@@ -19,7 +19,7 @@ type FormData = {
   nome: string;
   email: string;
   whatsapp?: string;
-  tipo?: string;
+  tipo: string;
   cpf?: string;
   cnpj?: string;
 };
@@ -27,6 +27,10 @@ type FormData = {
 const formSchema = z.object({
   nome: z.string().min(1, "Nome inválido"),
   email: z.string().email("Email inválido"),
+  whatsapp: z.string().optional(),
+  tipo: z.string(),
+  cpf: z.string().optional(),
+  cnpj: z.string().optional(),
 });
 
 export default function CustomerForm({
@@ -47,7 +51,11 @@ export default function CustomerForm({
     reset,
     setValue,
   } = useForm<FormData>({
-    defaultValues: initialData || {},
+    defaultValues: initialData || {
+      tipo: "cpf",
+      cpf: "",
+      cpnj: "",
+    },
     resolver: zodResolver(formSchema),
   });
 
@@ -62,15 +70,6 @@ export default function CustomerForm({
 
     if (type === "cpf") totalData.cpf = data.cpf;
     if (type === "cnpj") totalData.cnpj = data.cnpj;
-
-    await fetch(
-      `http://localhost:8000/clientes/${initialData ? initialData.id : ""}`,
-      {
-        method: initialData ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(totalData),
-      },
-    );
 
     try {
       // Faz o POST ou PUT para a api
@@ -108,7 +107,6 @@ export default function CustomerForm({
       setValue("tipo", "cpf");
       setValue("cpf", "");
       setValue("cnpj", "");
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -120,7 +118,10 @@ export default function CustomerForm({
   }, [type, setValue]);
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
+    >
       <Field>
         <Label>Nome</Label>
         <Input
