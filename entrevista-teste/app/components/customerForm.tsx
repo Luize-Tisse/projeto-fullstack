@@ -115,6 +115,8 @@ export default function CustomerForm({
   // Defini valor inicial do tipo no formulário
   useEffect(() => {
     setValue("tipo", type || "cpf");
+    setValue("cpf", "");
+    setValue("cnpj", "");
   }, [type, setValue]);
 
   return (
